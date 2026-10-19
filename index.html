@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6fb">
+  <title>Homebase | Family Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="login-overlay" id="loginOverlay" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
+    <form class="login-card" id="loginForm">
+      <div class="login-mark" aria-hidden="true">⌂</div>
+      <p class="eyebrow">YOUR FAMILY, IN SYNC</p>
+      <h1 id="loginTitle">Welcome home</h1>
+      <p class="login-copy">Sign in to see what’s happening today.</p>
+      <label for="username">Username</label>
+      <input id="username" name="username" autocomplete="username" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <p class="login-error" id="loginError" role="alert" hidden></p>
+      <button class="button button-primary login-submit" type="submit">Sign in <span aria-hidden="true">→</span></button>
+      <p class="demo-hint">Accounts: jeyad, hany, mila, maya · each password matches its username</p>
+    </form>
+  </div>
+
+  <div class="app-shell" id="appShell" aria-hidden="true" inert>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Homebase dashboard">
+        <span class="brand-mark">⌂</span>
+        <span>homebase<span class="brand-period">.</span></span>
+      </a>
+      <div class="topbar-right">
+        <div class="user-greeting" id="userGreeting"></div>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+          <span class="theme-label">Dark mode</span>
+        </button>
+        <button class="button button-quiet sign-out" id="signOutButton" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="welcome-row">
+        <div>
+          <p class="eyebrow">THE FAMILY DASHBOARD</p>
+          <h1>Make today a good one<span class="heading-period">.</span></h1>
+          <p class="welcome-copy">A little more organized, a lot more together.</p>
+        </div>
+        <div class="date-clock" aria-label="Current local date and time">
+          <time id="currentDate"></time>
+          <span class="clock" id="clock"></span>
+        </div>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="card schedule-card" aria-labelledby="scheduleTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">PLAN THE DAY</p>
+              <h2 id="scheduleTitle">Today's schedule</h2>
+            </div>
+            <span class="item-count" id="scheduleCount"></span>
+          </div>
+          <div class="filter-row" role="group" aria-label="Filter schedule by category">
+            <button class="filter-chip active" type="button" data-filter="All">All</button>
+            <button class="filter-chip" type="button" data-filter="Academic/Tuition">Academic</button>
+            <button class="filter-chip" type="button" data-filter="Chores">Chores</button>
+            <button class="filter-chip" type="button" data-filter="Personal">Personal</button>
+            <button class="filter-chip" type="button" data-filter="Family Events">Family</button>
+          </div>
+          <div class="schedule-list" id="scheduleList" aria-live="polite"></div>
+          <form class="admin-form schedule-form admin-only" id="scheduleForm" hidden>
+            <p class="form-title">Add to the schedule</p>
+            <div class="form-grid">
+              <label class="field field-wide">What’s happening?
+                <input name="title" placeholder="e.g. Pick up groceries" maxlength="100" required>
+              </label>
+              <label class="field">Time
+                <input name="time" type="time" required>
+              </label>
+              <label class="field">Category
+                <select name="category" required>
+                  <option>Academic/Tuition</option>
+                  <option>Chores</option>
+                  <option>Personal</option>
+                  <option>Family Events</option>
+                </select>
+              </label>
+              <label class="field field-wide">Assigned to
+                <select name="assignedTo" required>
+                  <option>Jeyad</option>
+                  <option>Hany</option>
+                  <option>Mila</option>
+                  <option>Maya</option>
+                  <option>Everyone</option>
+                </select>
+              </label>
+            </div>
+            <button class="button button-primary" type="submit">Add event</button>
+          </form>
+        </section>
+
+        <section class="card links-card" aria-labelledby="linksTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">ONE-TAP FAVORITES</p>
+              <h2 id="linksTitle">Quick links</h2>
+            </div>
+            <span class="section-icon" aria-hidden="true">↗</span>
+          </div>
+          <div class="quick-links" id="quickLinks"></div>
+          <form class="admin-form link-form admin-only" id="linkForm" hidden>
+            <p class="form-title" id="linkFormTitle">Add a shortcut</p>
+            <label class="field">Name
+              <input name="title" maxlength="50" placeholder="School portal" required>
+            </label>
+            <label class="field">Website address
+              <input name="url" type="url" placeholder="https://example.com" required>
+            </label>
+            <div class="form-actions">
+              <button class="button button-primary" type="submit" id="linkSubmitButton">Add link</button>
+              <button class="button button-quiet" type="button" id="cancelLinkEdit" hidden>Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card prayer-card" aria-labelledby="prayerTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">KUWAIT CITY · LOCAL TIME</p>
+              <h2 id="prayerTitle">🕌 Prayer times & weather</h2>
+            </div>
+            <span class="section-icon" aria-hidden="true">☀</span>
+          </div>
+          <div class="prayer-date" id="prayerDate"></div>
+          <div class="weather-summary" id="weatherSummary" aria-live="polite">Getting Kuwait weather…</div>
+          <p class="prayer-countdown" id="prayerCountdown" aria-live="polite">Loading today's prayer times…</p>
+          <p class="data-status" id="prayerStatus" role="status"></p>
+          <div class="prayer-table" id="prayerTable"></div>
+        </section>
+
+        <section class="card shopping-card" aria-labelledby="shoppingTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">THE FAMILY SHOPPING LIST</p>
+              <h2 id="shoppingTitle">🛒 Shopping & pantry</h2>
+            </div>
+            <button class="button button-quiet admin-only" id="clearShoppingButton" type="button" hidden>Clear bought</button>
+          </div>
+          <div class="shopping-list" id="shoppingList" aria-live="polite"></div>
+          <form class="admin-form shopping-form" id="shoppingForm">
+            <p class="form-title">Add an item</p>
+            <div class="form-grid">
+              <label class="field field-wide">Item
+                <input name="item" maxlength="80" placeholder="e.g. Milk" required>
+              </label>
+              <label class="field">Quantity
+                <input name="quantity" maxlength="30" placeholder="e.g. 2 cartons" required>
+              </label>
+              <label class="field">Category
+                <select name="category" required>
+                  <option>Groceries</option>
+                  <option>Household Essentials</option>
+                  <option>Snacks</option>
+                </select>
+              </label>
+            </div>
+            <button class="button button-primary" type="submit">Add to list</button>
+          </form>
+        </section>
+
+        <section class="card countdown-card" aria-labelledby="countdownTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">COMING UP</p>
+              <h2 id="countdownTitle">⏳ Exams & events</h2>
+            </div>
+            <span class="item-count" id="countdownCount"></span>
+          </div>
+          <div class="countdown-list" id="countdownList" aria-live="polite"></div>
+          <form class="admin-form countdown-form admin-only" id="countdownForm" hidden>
+            <p class="form-title">Add a countdown</p>
+            <div class="form-grid">
+              <label class="field field-wide">Event or deadline
+                <input name="title" maxlength="80" placeholder="e.g. Science exam" required>
+              </label>
+              <label class="field field-wide">Date and time
+                <input name="date" type="datetime-local" required>
+              </label>
+            </div>
+            <button class="button button-primary" type="submit">Add countdown</button>
+          </form>
+        </section>
+
+        <section class="card chores-card" aria-labelledby="choresTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">THIS WEEK, TOGETHER</p>
+              <h2 id="choresTitle">🧹 Family chore tracker</h2>
+            </div>
+            <span class="item-count" id="choreProgressText"></span>
+          </div>
+          <div class="progress-track" role="progressbar" id="choreProgress" aria-label="Weekly chores completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span class="progress-fill" id="choreProgressFill"></span>
+          </div>
+          <div class="chore-list" id="choreList" aria-live="polite"></div>
+        </section>
+
+        <section class="card meals-card" aria-labelledby="mealsTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">WHAT'S COOKING</p>
+              <h2 id="mealsTitle">🍽️ Weekly meal planner</h2>
+            </div>
+            <span class="section-icon" aria-hidden="true">✦</span>
+          </div>
+          <div class="meal-board" id="mealBoard" aria-live="polite"></div>
+          <form class="admin-form meals-form admin-only" id="mealsForm" hidden>
+            <p class="form-title">Update this week's meals</p>
+            <div class="meal-edit-grid" id="mealEditGrid"></div>
+            <button class="button button-primary" type="submit">Save meal plan</button>
+          </form>
+        </section>
+
+        <section class="card contacts-card" aria-labelledby="contactsTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">JUST IN CASE</p>
+              <h2 id="contactsTitle">🚨 Emergency contacts & info</h2>
+            </div>
+            <span class="section-icon" aria-hidden="true">＋</span>
+          </div>
+          <div class="contacts-list" id="contactsList"></div>
+          <form class="admin-form contacts-form admin-only" id="contactsForm" hidden>
+            <p class="form-title">Edit family info</p>
+            <label class="field">Wi-Fi network
+              <input name="wifiName" maxlength="80" required>
+            </label>
+            <label class="field">Wi-Fi password
+              <input name="wifiPassword" maxlength="80">
+            </label>
+            <label class="field">Emergency number
+              <input name="emergency" maxlength="100" required>
+            </label>
+            <label class="field">Doctor
+              <input name="doctor" maxlength="120">
+            </label>
+            <label class="field">Building maintenance
+              <input name="maintenance" maxlength="120">
+            </label>
+            <button class="button button-primary" type="submit">Save family info</button>
+          </form>
+        </section>
+
+        <section class="card settings-card admin-only" aria-labelledby="settingsTitle" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">MAKE IT YOURS</p>
+              <h2 id="settingsTitle">Dashboard layout</h2>
+            </div>
+          </div>
+          <label class="field">Card spacing
+            <select id="layoutSetting">
+              <option value="comfortable">Comfortable</option>
+              <option value="compact">Compact</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="card fridge-card" aria-labelledby="fridgeTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">LEAVE A LITTLE NOTE</p>
+              <h2 id="fridgeTitle">The family fridge</h2>
+            </div>
+            <button class="button button-quiet admin-only" id="clearNotesButton" type="button" hidden>Clear board</button>
+          </div>
+          <div class="notes-grid" id="notesGrid" aria-live="polite"></div>
+          <form class="admin-form note-form" id="noteForm">
+            <p class="form-title">Pin a note</p>
+            <label class="field">Your message
+              <textarea name="text" rows="2" maxlength="180" placeholder="Leave a reminder or a kind note…" required></textarea>
+            </label>
+            <div class="note-form-bottom">
+              <label class="field color-field">Note color
+                <select name="color">
+                  <option value="yellow">Sunshine</option>
+                  <option value="pink">Blush</option>
+                  <option value="blue">Sky</option>
+                  <option value="green">Sage</option>
+                </select>
+              </label>
+              <button class="button button-primary" type="submit">Pin note <span aria-hidden="true">＋</span></button>
+            </div>
+          </form>
+        </section>
+      </div>
+      <footer class="dashboard-footer">Made with care, for the people who make a home. <span>♥</span></footer>
+    </main>
+  </div>
+</body>
+</html>
