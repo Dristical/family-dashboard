@@ -3,34 +3,548 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuwait Family Hub</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Family Site</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #fdf4f5 100%);
+            --bg: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.85);
+            --surface-solid: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: rgba(79, 70, 229, 0.1);
+            --border: rgba(226, 232, 240, 0.8);
+            --shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
+            --shadow-hover: 0 20px 40px -10px rgba(79, 70, 229, 0.12);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --accent-gold: #f59e0b;
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #110d18 100%);
+            --bg: #0b0f19;
+            --surface: rgba(21, 28, 44, 0.8);
+            --surface-solid: #151c2c;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #6366f1;
+            --primary-hover: #818cf8;
+            --primary-light: rgba(99, 102, 241, 0.15);
+            --border: rgba(35, 45, 66, 0.8);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 20px 40px -10px rgba(99, 102, 241, 0.2);
+            --accent-gold: #fbbf24;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--surface-solid);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-hover);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .brand-icon-wrapper {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 1.8rem;
+        }
+
+        .login-header {
+            text-align: center;
+        }
+
+        .login-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .login-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .styled-input, .styled-select, .styled-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .styled-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .styled-input:focus, .styled-select:focus, .styled-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .icon-btn, .subtle-btn {
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover, .subtle-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .app-header {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .user-avatar-header {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .header-brand h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .user-pill {
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .tab-nav {
+            display: flex;
+            background: var(--bg);
+            padding: 6px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            gap: 6px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            background: var(--surface-solid);
+            color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-area {
+            padding: 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+        }
+
+        .dashboard-grid.two-col {
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+        }
+
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .hero-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: white;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 15px 35px -10px rgba(79, 70, 229, 0.4);
+        }
+
+        .hero-content h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero-content p {
+            opacity: 0.9;
+            font-size: 1.05rem;
+        }
+
+        .hero-badge-art {
+            font-size: 4rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 16px;
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .today-banner {
+            grid-column: 1 / -1;
+            background: rgba(245, 158, 11, 0.12);
+            border: 2px solid var(--accent-gold);
+            border-radius: var(--radius-md);
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 600;
+        }
+
+        .today-banner-badge {
+            background: var(--accent-gold);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .list-container {
+            min-height: 160px;
+            max-height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: 4px;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: var(--surface-solid);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .list-item.done {
+            text-decoration: line-through;
+            opacity: 0.5;
+            background: var(--bg);
+        }
+
+        .event-badge-today {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-gold);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .event-badge-upcoming {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            flex-wrap: wrap;
+        }
+
+        .single-card-centered {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: -10px;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .dashboard-hidden {
+            display: none !important;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-msg {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .pfp-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin: 0 auto;
+        }
+
+        .preset-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        @media (max-width: 900px) {
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+                padding: 20px;
+            }
+            .tab-nav {
+                overflow-x: auto;
+                width: 100%;
+            }
+            .hero-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .dashboard-grid.two-col {
+                grid-template-columns: 1fr;
+            }
+            .content-area {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <!-- CLEAN LOGIN SCREEN -->
     <div id="login-screen" class="login-container">
         <div class="login-card">
-            <div class="brand-icon">🏠</div>
-            <h2>Family Hub</h2>
+            <div class="brand-icon-wrapper">
+                <span>🏠</span>
+            </div>
+            <div class="login-header">
+                <h2>Welcome Home</h2>
+                <p>Select your profile to enter the family space</p>
+            </div>
             
-            <div class="field-group">
-                <label for="login-user">Select Member</label>
-                <select id="login-user">
-                    <option value="Jeyad">Jeyad</option>
-                    <option value="Hany">Hany</option>
-                    <option value="Mila">Mila</option>
-                    <option value="Maya">Maya</option>
-                </select>
-            </div>
+            <form id="login-form" onsubmit="handleLogin(event)" class="login-form">
+                <div class="field-group">
+                    <label for="login-user">Family Member</label>
+                    <select id="login-user" class="styled-select">
+                        <option value="Jeyad">Jeyad</option>
+                        <option value="Hany">Hany</option>
+                        <option value="Mila">Mila</option>
+                        <option value="Maya">Maya</option>
+                    </select>
+                </div>
 
-            <div class="field-group">
-                <label for="login-pass">Password</label>
-                <input type="password" id="login-pass" placeholder="Enter password">
-            </div>
+                <div class="field-group">
+                    <label for="login-pass">Passcode</label>
+                    <input type="password" id="login-pass" class="styled-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
 
-            <button id="login-btn" class="btn-primary">Sign In</button>
+                <button type="submit" class="btn-primary">Sign In to Dashboard</button>
+            </form>
             <p id="login-error" class="error-msg"></p>
         </div>
     </div>
@@ -38,48 +552,63 @@
     <!-- MAIN APP DASHBOARD -->
     <div id="dashboard-app" class="app-container dashboard-hidden">
         
-        <!-- TOP NAVIGATION BAR -->
+        <!-- HEADER -->
         <header class="app-header">
             <div class="header-brand">
-                <span class="hub-logo">🏠</span>
+                <img id="header-pfp" class="user-avatar-header" src="" alt="PFP">
                 <div>
-                    <h1>Kuwait Family Hub</h1>
-                    <span id="user-badge" class="badge"></span>
+                    <h1>Family Site</h1>
+                    <span id="user-badge" class="user-pill"></span>
                 </div>
             </div>
 
-            <!-- TABS MENU -->
+            <!-- TAB NAVIGATION -->
             <nav class="tab-nav">
                 <button class="tab-btn active" data-tab="tab-overview">Overview</button>
-                <button class="tab-btn" data-tab="tab-personal">My Personal Space</button>
-                <button class="tab-btn" data-tab="tab-family">Family Board & Tasks</button>
+                <button class="tab-btn" data-tab="tab-personal">My Space</button>
+                <button class="tab-btn" data-tab="tab-family">Family Board</button>
+                <button class="tab-btn" data-tab="tab-shopping">Shopping List</button>
                 <button class="tab-btn" data-tab="tab-chores">Chores</button>
+                <button class="tab-btn" data-tab="tab-settings">Settings</button>
             </nav>
 
             <div class="header-actions">
-                <button id="theme-toggle" class="btn-icon">🌙</button>
-                <button id="logout-btn" class="btn-subtle">Log Out</button>
+                <button id="theme-toggle" class="icon-btn" title="Toggle Theme">🌙</button>
+                <button id="logout-btn" class="subtle-btn" onclick="handleLogout()">Log Out</button>
             </div>
         </header>
 
-        <!-- TAB CONTENT CONTAINER -->
+        <!-- CONTENT AREA -->
         <main class="content-area">
 
             <!-- TAB 1: OVERVIEW -->
             <section id="tab-overview" class="tab-content active">
                 <div class="dashboard-grid">
                     <div class="card hero-card">
-                        <h2>Welcome back, <span id="welcome-name"></span> 👋</h2>
-                        <p>Here is what's happening today in the family hub.</p>
+                        <div class="hero-content">
+                            <h2>Hello, <span id="welcome-name"></span>!</h2>
+                            <p>Here is a quick snapshot of what's happening around the house today.</p>
+                        </div>
+                        <div class="hero-badge-art">🏡</div>
+                    </div>
+
+                    <!-- LIVE HAPPENING TODAY BANNER -->
+                    <div id="today-alert-banner" class="today-banner" style="display: none;">
+                        <span class="today-banner-badge">Happening Today</span>
+                        <span id="today-alert-text"></span>
                     </div>
 
                     <div class="card">
-                        <h3>📢 Recent Announcements</h3>
+                        <div class="card-header">
+                            <h3>Board Announcements</h3>
+                        </div>
                         <div id="overview-announcements" class="list-container"></div>
                     </div>
 
                     <div class="card">
-                        <h3>⚡ Quick Shared Tasks</h3>
+                        <div class="card-header">
+                            <h3>Quick Shared Tasks</h3>
+                        </div>
                         <div id="overview-tasks" class="list-container"></div>
                     </div>
                 </div>
@@ -88,23 +617,52 @@
             <!-- TAB 2: MY PERSONAL SPACE -->
             <section id="tab-personal" class="tab-content">
                 <div class="dashboard-grid two-col">
+                    
+                    <!-- PERSONAL TASKS -->
                     <div class="card">
-                        <h3>✅ My Personal Tasks</h3>
+                        <div class="card-header">
+                            <h3>My Personal Tasks</h3>
+                        </div>
                         <div id="personal-tasks-list" class="list-container"></div>
                         <div class="input-row">
-                            <input type="text" id="new-personal-task" placeholder="Add a personal task...">
-                            <button onclick="addPersonalTask()" class="btn-primary">Add Task</button>
+                            <input type="text" id="new-personal-task" class="styled-input" placeholder="Add a personal task...">
+                            <button onclick="addPersonalTask()" class="btn-primary">Add</button>
                         </div>
                     </div>
 
+                    <!-- SMART EASY SCHEDULER -->
                     <div class="card">
-                        <h3>📅 My Personal Events & Schedule</h3>
+                        <div class="card-header">
+                            <h3>My Schedule & Events</h3>
+                        </div>
                         <div id="personal-events-list" class="list-container"></div>
-                        <div class="input-row">
-                            <input type="text" id="new-personal-event" placeholder="Add an event or reminder...">
-                            <button onclick="addPersonalEvent()" class="btn-primary">Add Event</button>
+                        
+                        <div class="input-row" style="flex-direction: column; gap: 10px;">
+                            <input type="text" id="new-event-title" class="styled-input" placeholder="Event description...">
+                            
+                            <!-- QUICK DATE PRESETS -->
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">PRESETS:</span>
+                                <button type="button" class="preset-btn" onclick="setEventPreset('today')">Today</button>
+                                <button type="button" class="preset-btn" onclick="setEventPreset('tomorrow')">Tomorrow</button>
+                                <button type="button" class="preset-btn" onclick="setEventPreset('anytime')">Anytime / No Date</button>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <input type="datetime-local" id="new-event-time" class="styled-input" style="flex: 1;">
+                                <button onclick="addPersonalEvent()" class="btn-primary">Schedule</button>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- PERSONAL SCRATCHPAD / NOTES -->
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <div class="card-header">
+                            <h3>Personal Scratchpad / Quick Notes</h3>
+                        </div>
+                        <textarea id="personal-notes" class="styled-textarea" placeholder="Type quick notes, thoughts, or reminders here... (Saves automatically)" oninput="savePersonalNotes()"></textarea>
+                    </div>
+
                 </div>
             </section>
 
@@ -112,46 +670,500 @@
             <section id="tab-family" class="tab-content">
                 <div class="dashboard-grid two-col">
                     <div class="card">
-                        <h3>📢 Family Announcements</h3>
+                        <div class="card-header">
+                            <h3>Board Announcements</h3>
+                        </div>
                         <div id="family-announcements-list" class="list-container"></div>
                         <div class="input-row">
-                            <input type="text" id="new-announcement" placeholder="Post announcement to everyone...">
+                            <input type="text" id="new-announcement" class="styled-input" placeholder="Post announcement to everyone...">
                             <button onclick="addAnnouncement()" class="btn-primary">Post</button>
                         </div>
                     </div>
 
                     <div class="card">
-                        <h3>📋 Shared Family Tasks</h3>
+                        <div class="card-header">
+                            <h3>Shared Family Tasks</h3>
+                        </div>
                         <div id="shared-tasks-list" class="list-container"></div>
                         <div class="input-row">
-                            <input type="text" id="new-shared-task" placeholder="Add shared task for the family...">
-                            <button onclick="addSharedTask()" class="btn-primary">Add Task</button>
+                            <input type="text" id="new-shared-task" class="styled-input" placeholder="Add shared family task...">
+                            <button onclick="addSharedTask()" class="btn-primary">Add</button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- TAB 4: CHORES -->
-            <section id="tab-chores" class="tab-content">
-                <div class="card max-width-card">
-                    <h3>🧹 Family Chore Tracker</h3>
-                    <div id="chores-list" class="list-container"></div>
+            <!-- TAB 4: SHOPPING LIST -->
+            <section id="tab-shopping" class="tab-content">
+                <div class="card single-card-centered">
+                    <div class="card-header">
+                        <h3>Household Shopping List</h3>
+                    </div>
+                    <p class="section-desc">Add groceries or home supplies needed for the family.</p>
+                    <div id="shopping-list" class="list-container"></div>
                     <div class="input-row">
-                        <input type="text" id="new-chore-text" placeholder="Chore description...">
-                        <select id="new-chore-assignee">
+                        <input type="text" id="new-shopping-item" class="styled-input" placeholder="Item to buy (e.g., Milk, Bread)...">
+                        <button onclick="addShoppingItem()" class="btn-primary">Add Item</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: CHORES -->
+            <section id="tab-chores" class="tab-content">
+                <div class="card single-card-centered">
+                    <div class="card-header">
+                        <h3>Household Chores Tracker</h3>
+                    </div>
+                    <div id="chores-list" class="list-container"></div>
+                    
+                    <!-- ADMIN ONLY CHORE CREATION -->
+                    <div id="admin-chore-section" class="input-row" style="display: none;">
+                        <input type="text" id="new-chore-text" class="styled-input" placeholder="Describe chore...">
+                        <select id="new-chore-assignee" class="styled-select" style="max-width: 150px;">
                             <option value="Jeyad">Jeyad</option>
                             <option value="Hany">Hany</option>
                             <option value="Mila">Mila</option>
                             <option value="Maya">Maya</option>
                         </select>
-                        <button onclick="addChore()" class="btn-primary">Assign Chore</button>
+                        <button onclick="addChore()" class="btn-primary">Assign</button>
                     </div>
+                    <p id="non-admin-chore-notice" style="font-size: 0.85rem; color: var(--text-muted); text-align: center; display: none;">Only Jeyad (Admin) can assign and create new chores.</p>
+                </div>
+            </section>
+
+            <!-- TAB 6: SETTINGS -->
+            <section id="tab-settings" class="tab-content">
+                <div class="dashboard-grid two-col" style="max-width: 900px; margin: 0 auto;">
+                    
+                    <!-- PASSCODE CHANGE -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Account Security</h3>
+                        </div>
+                        <p class="section-desc">Update your login passcode securely.</p>
+                        
+                        <form onsubmit="handlePasswordChange(event)" class="settings-form">
+                            <div class="field-group">
+                                <label>New Passcode</label>
+                                <input type="password" id="new-pass-input" class="styled-input" placeholder="••••••••" required autocomplete="new-password">
+                            </div>
+                            <div class="field-group">
+                                <label>Confirm Passcode</label>
+                                <input type="password" id="confirm-pass-input" class="styled-input" placeholder="••••••••" required autocomplete="new-password">
+                            </div>
+                            <button type="submit" class="btn-primary">Update Passcode</button>
+                        </form>
+                        <p id="password-status-msg" class="status-msg"></p>
+                    </div>
+
+                    <!-- PFP UPDATE -->
+                    <div class="card" style="align-items: center; text-align: center;">
+                        <div class="card-header">
+                            <h3>Profile Picture</h3>
+                        </div>
+                        <img id="settings-pfp-preview" class="pfp-preview" src="" alt="PFP">
+                        <div class="field-group" style="width: 100%;">
+                            <label>Image URL</label>
+                            <input type="url" id="pfp-url-input" class="styled-input" placeholder="Paste image address link...">
+                        </div>
+                        <button onclick="updatePFP()" class="btn-primary" style="width: 100%;">Save Profile Picture</button>
+                        <p id="pfp-status-msg" class="status-msg"></p>
+                    </div>
+
                 </div>
             </section>
 
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const defaultPasswords = { jeyad: "jeyad", hany: "hany", mila: "mila", maya: "maya" };
+        const defaultPFPs = {
+            Jeyad: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jeyad",
+            Hany: "https://api.dicebear.com/7.x/avataaars/svg?seed=Hany",
+            Mila: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mila",
+            Maya: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maya"
+        };
+
+        const store = {
+            user: localStorage.getItem('hub_user') || null,
+            passwords: JSON.parse(localStorage.getItem('hub_passwords')) || defaultPasswords,
+            pfps: JSON.parse(localStorage.getItem('hub_pfps')) || defaultPFPs,
+            announcements: JSON.parse(localStorage.getItem('hub_announcements')) || ["Welcome to the family site!"],
+            sharedTasks: JSON.parse(localStorage.getItem('hub_shared_tasks')) || [{ text: "Stock up drinking water", done: false }],
+            shoppingItems: JSON.parse(localStorage.getItem('hub_shopping_items')) || [{ text: "Milk", done: false }],
+            personalTasks: JSON.parse(localStorage.getItem('hub_personal_tasks')) || {},
+            personalEvents: JSON.parse(localStorage.getItem('hub_personal_events')) || {},
+            personalNotes: JSON.parse(localStorage.getItem('hub_personal_notes')) || {},
+            chores: JSON.parse(localStorage.getItem('hub_chores')) || [{ text: "Living room tidy up", assignee: "Hany", done: false }]
+        };
+
+        function saveStore() {
+            localStorage.setItem('hub_passwords', JSON.stringify(store.passwords));
+            localStorage.setItem('hub_pfps', JSON.stringify(store.pfps));
+            localStorage.setItem('hub_announcements', JSON.stringify(store.announcements));
+            localStorage.setItem('hub_shared_tasks', JSON.stringify(store.sharedTasks));
+            localStorage.setItem('hub_shopping_items', JSON.stringify(store.shoppingItems));
+            localStorage.setItem('hub_personal_tasks', JSON.stringify(store.personalTasks));
+            localStorage.setItem('hub_personal_events', JSON.stringify(store.personalEvents));
+            localStorage.setItem('hub_personal_notes', JSON.stringify(store.personalNotes));
+            localStorage.setItem('hub_chores', JSON.stringify(store.chores));
+        }
+
+        function handleLogin(e) {
+            if (e) e.preventDefault();
+            const user = document.getElementById('login-user').value;
+            const pass = document.getElementById('login-pass').value.toLowerCase().trim();
+            const errorElem = document.getElementById('login-error');
+
+            const validPassword = (store.passwords[user.toLowerCase()] || user).toLowerCase();
+
+            if (pass === validPassword) {
+                store.user = user;
+                localStorage.setItem('hub_user', user);
+                errorElem.innerText = "";
+                document.getElementById('login-pass').value = "";
+                initApp();
+            } else {
+                errorElem.innerText = "Incorrect passcode. Please try again.";
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('hub_user');
+            store.user = null;
+            initApp();
+        }
+
+        function handlePasswordChange(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('new-pass-input').value.toLowerCase().trim();
+            const confirmPass = document.getElementById('confirm-pass-input').value.toLowerCase().trim();
+            const statusMsg = document.getElementById('password-status-msg');
+
+            if (newPass !== confirmPass) {
+                statusMsg.style.color = "#ef4444";
+                statusMsg.innerText = "Passcodes do not match!";
+                return;
+            }
+
+            store.passwords[store.user.toLowerCase()] = newPass;
+            saveStore();
+
+            statusMsg.style.color = "#10b981";
+            statusMsg.innerText = "Passcode updated successfully!";
+            document.getElementById('new-pass-input').value = "";
+            document.getElementById('confirm-pass-input').value = "";
+        }
+
+        function updatePFP() {
+            const url = document.getElementById('pfp-url-input').value.trim();
+            const statusMsg = document.getElementById('pfp-status-msg');
+            if (url) {
+                store.pfps[store.user] = url;
+                saveStore();
+                document.getElementById('header-pfp').src = url;
+                document.getElementById('settings-pfp-preview').src = url;
+                statusMsg.style.color = "#10b981";
+                statusMsg.innerText = "Profile picture updated!";
+                document.getElementById('pfp-url-input').value = "";
+            }
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                e.target.classList.add('active');
+                document.getElementById(e.target.dataset.tab).classList.add('active');
+            });
+        });
+
+        function initApp() {
+            if (!store.user) {
+                document.getElementById('login-screen').classList.remove('dashboard-hidden');
+                document.getElementById('dashboard-app').classList.add('dashboard-hidden');
+                return;
+            }
+
+            document.getElementById('login-screen').classList.add('dashboard-hidden');
+            document.getElementById('dashboard-app').classList.remove('dashboard-hidden');
+
+            const userPFP = store.pfps[store.user] || defaultPFPs[store.user];
+            document.getElementById('header-pfp').src = userPFP;
+            document.getElementById('settings-pfp-preview').src = userPFP;
+
+            document.getElementById('welcome-name').innerText = store.user;
+            document.getElementById('user-badge').innerText = `${store.user} ${store.user === 'Jeyad' ? '• Admin' : '• Member'}`;
+
+            // Load personal scratchpad notes
+            document.getElementById('personal-notes').value = store.personalNotes[store.user] || "";
+
+            // Admin control visibility for chores
+            if (store.user === 'Jeyad') {
+                document.getElementById('admin-chore-section').style.display = 'flex';
+                document.getElementById('non-admin-chore-notice').style.display = 'none';
+            } else {
+                document.getElementById('admin-chore-section').style.display = 'none';
+                document.getElementById('non-admin-chore-notice').style.display = 'block';
+            }
+
+            renderAll();
+        }
+
+        function renderAll() {
+            renderOverview();
+            renderPersonalSpace();
+            renderFamilyBoard();
+            renderShoppingList();
+            renderChores();
+            checkTodayEventsAlert();
+        }
+
+        function isToday(dateStr) {
+            if (!dateStr) return false;
+            const today = new Date();
+            const date = new Date(dateStr);
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
+        }
+
+        function checkTodayEventsAlert() {
+            const myEvents = store.personalEvents[store.user] || [];
+            const todayEvents = myEvents.filter(e => isToday(e.time));
+
+            const banner = document.getElementById('today-alert-banner');
+            const alertText = document.getElementById('today-alert-text');
+
+            if (todayEvents.length > 0) {
+                banner.style.display = 'flex';
+                alertText.innerText = `You have ${todayEvents.length} event(s) scheduled for today: "${todayEvents.map(e => e.title).join(', ')}"`;
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
+        function renderOverview() {
+            document.getElementById('overview-announcements').innerHTML = store.announcements.length ? store.announcements
+                .slice(-3).map(a => `<div class="list-item">📢 ${a}</div>`).join('') : '<p style="color: var(--text-muted); font-size:0.9rem;">No announcements.</p>';
+            
+            document.getElementById('overview-tasks').innerHTML = store.sharedTasks.length ? store.sharedTasks
+                .slice(-3).map(t => `<div class="list-item ${t.done ? 'done' : ''}">📌 ${t.text}</div>`).join('') : '<p style="color: var(--text-muted); font-size:0.9rem;">No active tasks.</p>';
+        }
+
+        function renderPersonalSpace() {
+            const myTasks = store.personalTasks[store.user] || [];
+            let myEvents = store.personalEvents[store.user] || [];
+
+            // Sort events by date/time
+            myEvents.sort((a, b) => {
+                if (!a.time) return 1;
+                if (!b.time) return -1;
+                return new Date(a.time) - new Date(b.time);
+            });
+
+            document.getElementById('personal-tasks-list').innerHTML = myTasks.length ? myTasks.map((t, i) => `
+                <div class="list-item ${t.done ? 'done' : ''}">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onclick="togglePersonalTask(${i})" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                        <span>${t.text}</span>
+                    </div>
+                </div>
+            `).join('') : '<p style="color: var(--text-muted); font-size: 0.9rem;">No personal tasks added yet.</p>';
+
+            document.getElementById('personal-events-list').innerHTML = myEvents.length ? myEvents.map((e, i) => {
+                const today = isToday(e.time);
+                const dateLabel = e.time ? new Date(e.time).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'Anytime (No Date)';
+                return `
+                    <div class="list-item">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <strong>${e.title}</strong>
+                                ${today ? '<span class="event-badge-today">TODAY</span>' : (e.time ? '<span class="event-badge-upcoming">Upcoming</span>' : '')}
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">🗓️ ${dateLabel}</div>
+                        </div>
+                        <button onclick="deletePersonalEvent(${i})" style="background:transparent; border:none; color:#ef4444; cursor:pointer; font-weight:bold; font-size: 1.1rem;">×</button>
+                    </div>
+                `;
+            }).join('') : '<p style="color: var(--text-muted); font-size: 0.9rem;">No events scheduled.</p>';
+        }
+
+        function setEventPreset(preset) {
+            const timeInput = document.getElementById('new-event-time');
+            const now = new Date();
+            
+            if (preset === 'today') {
+                now.setHours(18, 0, 0, 0); // Default to 6:00 PM today
+                timeInput.value = now.toISOString().slice(0, 16);
+            } else if (preset === 'tomorrow') {
+                now.setDate(now.getDate() + 1);
+                now.setHours(12, 0, 0, 0); // Default to 12:00 PM tomorrow
+                timeInput.value = now.toISOString().slice(0, 16);
+            } else if (preset === 'anytime') {
+                timeInput.value = "";
+            }
+        }
+
+        function addPersonalTask() {
+            const input = document.getElementById('new-personal-task');
+            if (input.value.trim()) {
+                if (!store.personalTasks[store.user]) store.personalTasks[store.user] = [];
+                store.personalTasks[store.user].push({ text: input.value.trim(), done: false });
+                input.value = '';
+                saveStore();
+                renderPersonalSpace();
+            }
+        }
+
+        function togglePersonalTask(i) {
+            store.personalTasks[store.user][i].done = !store.personalTasks[store.user][i].done;
+            saveStore();
+            renderPersonalSpace();
+        }
+
+        function addPersonalEvent() {
+            const titleInput = document.getElementById('new-event-title');
+            const timeInput = document.getElementById('new-event-time');
+            if (titleInput.value.trim()) {
+                if (!store.personalEvents[store.user]) store.personalEvents[store.user] = [];
+                store.personalEvents[store.user].push({ title: titleInput.value.trim(), time: timeInput.value || null });
+                titleInput.value = '';
+                timeInput.value = '';
+                saveStore();
+                renderPersonalSpace();
+                checkTodayEventsAlert();
+            }
+        }
+
+        function deletePersonalEvent(i) {
+            store.personalEvents[store.user].splice(i, 1);
+            saveStore();
+            renderPersonalSpace();
+            checkTodayEventsAlert();
+        }
+
+        function savePersonalNotes() {
+            const notes = document.getElementById('personal-notes').value;
+            store.personalNotes[store.user] = notes;
+            saveStore();
+        }
+
+        function renderFamilyBoard() {
+            document.getElementById('family-announcements-list').innerHTML = store.announcements.map(a => `
+                <div class="list-item">📢 ${a}</div>
+            `).join('');
+
+            document.getElementById('shared-tasks-list').innerHTML = store.sharedTasks.map((t, i) => `
+                <div class="list-item ${t.done ? 'done' : ''}">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleSharedTask(${i})" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                        <span>${t.text}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addAnnouncement() {
+            const input = document.getElementById('new-announcement');
+            if (input.value.trim()) {
+                store.announcements.push(`${store.user}: ${input.value.trim()}`);
+                input.value = '';
+                saveStore();
+                renderFamilyBoard();
+                renderOverview();
+            }
+        }
+
+        function addSharedTask() {
+            const input = document.getElementById('new-shared-task');
+            if (input.value.trim()) {
+                store.sharedTasks.push({ text: input.value.trim(), done: false });
+                input.value = '';
+                saveStore();
+                renderFamilyBoard();
+                renderOverview();
+            }
+        }
+
+        function toggleSharedTask(i) {
+            store.sharedTasks[i].done = !store.sharedTasks[i].done;
+            saveStore();
+            renderFamilyBoard();
+            renderOverview();
+        }
+
+        function renderShoppingList() {
+            document.getElementById('shopping-list').innerHTML = store.shoppingItems.length ? store.shoppingItems.map((item, i) => `
+                <div class="list-item ${item.done ? 'done' : ''}">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" ${item.done ? 'checked' : ''} onclick="toggleShoppingItem(${i})" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                        <span>🛒 ${item.text}</span>
+                    </div>
+                    <button onclick="deleteShoppingItem(${i})" style="background:transparent; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">×</button>
+                </div>
+            `).join('') : '<p style="color: var(--text-muted); font-size: 0.9rem;">Shopping list is empty.</p>';
+        }
+
+        function addShoppingItem() {
+            const input = document.getElementById('new-shopping-item');
+            if (input.value.trim()) {
+                store.shoppingItems.push({ text: input.value.trim(), done: false });
+                input.value = '';
+                saveStore();
+                renderShoppingList();
+            }
+        }
+
+        function toggleShoppingItem(i) {
+            store.shoppingItems[i].done = !store.shoppingItems[i].done;
+            saveStore();
+            renderShoppingList();
+        }
+
+        function deleteShoppingItem(i) {
+            store.shoppingItems.splice(i, 1);
+            saveStore();
+            renderShoppingList();
+        }
+
+        function renderChores() {
+            document.getElementById('chores-list').innerHTML = store.chores.map((c, i) => `
+                <div class="list-item ${c.done ? 'done' : ''}">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" ${c.done ? 'checked' : ''} onclick="toggleChore(${i})" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                        <span><b>${c.assignee}:</b> ${c.text}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addChore() {
+            if (store.user !== 'Jeyad') return;
+            const text = document.getElementById('new-chore-text').value.trim();
+            const assignee = document.getElementById('new-chore-assignee').value;
+            if (text) {
+                store.chores.push({ text, assignee, done: false });
+                document.getElementById('new-chore-text').value = '';
+                saveStore();
+                renderChores();
+            }
+        }
+
+        function toggleChore(i) {
+            store.chores[i].done = !store.chores[i].done;
+            saveStore();
+            renderChores();
+        }
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        });
+
+        initApp();
+    </script>
 </body>
 </html>
