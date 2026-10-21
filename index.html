@@ -3,89 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Shared Dashboard & Calendar</title>
+    <title>Kuwait Family Hub</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- LOGIN SCREEN -->
+
+    <!-- CLEAN LOGIN SCREEN -->
     <div id="login-screen" class="login-container">
         <div class="login-card">
-            <h2>Family Hub Login</h2>
-            <p>Select your profile and enter your password</p>
-            <select id="login-user">
-                <option value="Jeyad">Jeyad (Admin)</option>
-                <option value="Hany">Hany (Member)</option>
-                <option value="Mila">Mila (Member)</option>
-                <option value="Maya">Maya (Member)</option>
-            </select>
-            <input type="password" id="login-pass" placeholder="Password (matches username)">
-            <button id="login-btn" class="btn-primary">Log In</button>
+            <div class="brand-icon">🏠</div>
+            <h2>Family Hub</h2>
+            
+            <div class="field-group">
+                <label for="login-user">Select Member</label>
+                <select id="login-user">
+                    <option value="Jeyad">Jeyad</option>
+                    <option value="Hany">Hany</option>
+                    <option value="Mila">Mila</option>
+                    <option value="Maya">Maya</option>
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label for="login-pass">Password</label>
+                <input type="password" id="login-pass" placeholder="Enter password">
+            </div>
+
+            <button id="login-btn" class="btn-primary">Sign In</button>
             <p id="login-error" class="error-msg"></p>
         </div>
     </div>
 
-    <!-- MAIN DASHBOARD -->
-    <div id="dashboard-app" class="dashboard-hidden">
+    <!-- MAIN APP DASHBOARD -->
+    <div id="dashboard-app" class="app-container dashboard-hidden">
+        
+        <!-- TOP NAVIGATION BAR -->
         <header class="app-header">
-            <div class="header-left">
-                <h1>🏠 Kuwait Family Hub</h1>
-                <span id="live-clock"></span>
+            <div class="header-brand">
+                <span class="hub-logo">🏠</span>
+                <div>
+                    <h1>Kuwait Family Hub</h1>
+                    <span id="user-badge" class="badge"></span>
+                </div>
             </div>
-            <div class="header-right">
-                <span id="user-badge"></span>
-                <button id="theme-toggle" class="btn-secondary">🌙 Mode</button>
-                <button id="logout-btn" class="btn-danger">Log Out</button>
+
+            <!-- TABS MENU -->
+            <nav class="tab-nav">
+                <button class="tab-btn active" data-tab="tab-overview">Overview</button>
+                <button class="tab-btn" data-tab="tab-personal">My Personal Space</button>
+                <button class="tab-btn" data-tab="tab-family">Family Board & Tasks</button>
+                <button class="tab-btn" data-tab="tab-chores">Chores</button>
+            </nav>
+
+            <div class="header-actions">
+                <button id="theme-toggle" class="btn-icon">🌙</button>
+                <button id="logout-btn" class="btn-subtle">Log Out</button>
             </div>
         </header>
 
-        <main class="dashboard-grid">
-            <!-- Left Column -->
-            <div class="column">
-                <section class="card">
-                    <h3>📌 Announcements & Family Board</h3>
-                    <div id="announcements-list" class="scroll-box"></div>
-                    <div class="input-group">
-                        <input type="text" id="new-announcement" placeholder="Add an announcement...">
-                        <button onclick="addAnnouncement()" class="btn-primary">Post</button>
-                    </div>
-                </section>
+        <!-- TAB CONTENT CONTAINER -->
+        <main class="content-area">
 
-                <section class="card">
+            <!-- TAB 1: OVERVIEW -->
+            <section id="tab-overview" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="card hero-card">
+                        <h2>Welcome back, <span id="welcome-name"></span> 👋</h2>
+                        <p>Here is what's happening today in the family hub.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>📢 Recent Announcements</h3>
+                        <div id="overview-announcements" class="list-container"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>⚡ Quick Shared Tasks</h3>
+                        <div id="overview-tasks" class="list-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: MY PERSONAL SPACE -->
+            <section id="tab-personal" class="tab-content">
+                <div class="dashboard-grid two-col">
+                    <div class="card">
+                        <h3>✅ My Personal Tasks</h3>
+                        <div id="personal-tasks-list" class="list-container"></div>
+                        <div class="input-row">
+                            <input type="text" id="new-personal-task" placeholder="Add a personal task...">
+                            <button onclick="addPersonalTask()" class="btn-primary">Add Task</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📅 My Personal Events & Schedule</h3>
+                        <div id="personal-events-list" class="list-container"></div>
+                        <div class="input-row">
+                            <input type="text" id="new-personal-event" placeholder="Add an event or reminder...">
+                            <button onclick="addPersonalEvent()" class="btn-primary">Add Event</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: FAMILY BOARD & SHARED TASKS -->
+            <section id="tab-family" class="tab-content">
+                <div class="dashboard-grid two-col">
+                    <div class="card">
+                        <h3>📢 Family Announcements</h3>
+                        <div id="family-announcements-list" class="list-container"></div>
+                        <div class="input-row">
+                            <input type="text" id="new-announcement" placeholder="Post announcement to everyone...">
+                            <button onclick="addAnnouncement()" class="btn-primary">Post</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Shared Family Tasks</h3>
+                        <div id="shared-tasks-list" class="list-container"></div>
+                        <div class="input-row">
+                            <input type="text" id="new-shared-task" placeholder="Add shared task for the family...">
+                            <button onclick="addSharedTask()" class="btn-primary">Add Task</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: CHORES -->
+            <section id="tab-chores" class="tab-content">
+                <div class="card max-width-card">
                     <h3>🧹 Family Chore Tracker</h3>
-                    <div id="chores-list"></div>
-                    <div class="input-group">
-                        <input type="text" id="new-chore" placeholder="New chore...">
-                        <select id="chore-assigned">
+                    <div id="chores-list" class="list-container"></div>
+                    <div class="input-row">
+                        <input type="text" id="new-chore-text" placeholder="Chore description...">
+                        <select id="new-chore-assignee">
                             <option value="Jeyad">Jeyad</option>
                             <option value="Hany">Hany</option>
                             <option value="Mila">Mila</option>
                             <option value="Maya">Maya</option>
                         </select>
-                        <button onclick="addChore()" class="btn-primary">Add</button>
+                        <button onclick="addChore()" class="btn-primary">Assign Chore</button>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
 
-            <!-- Right Column -->
-            <div class="column">
-                <section class="card">
-                    <h3>📅 Personal & Family Schedule</h3>
-                    <div id="schedule-list" class="scroll-box"></div>
-                    <div class="input-group">
-                        <input type="text" id="schedule-task" placeholder="Task / Schedule item...">
-                        <button onclick="addScheduleItem()" class="btn-primary">Add to Schedule</button>
-                    </div>
-                </section>
-
-                <section class="card">
-                    <h3>📋 Family Shared Tasks</h3>
-                    <div id="family-tasks-list"></div>
-                    <div class="input-group">
-                        <input type="text" id="new-family-task" placeholder="Add shared task...">
-                        <button onclick="addFamilyTask()" class="btn-primary">Add Task</button>
-                    </div>
-                </section>
-            </div>
         </main>
     </div>
 
